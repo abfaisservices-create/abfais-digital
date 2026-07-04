@@ -115,6 +115,15 @@ export default function App() {
         window.scrollTo({ top: 0, behavior: 'instant' });
       } else {
         setCurrentView('home');
+        if (hash === '#services' || hash === '#work' || hash === '#about' || hash === '#pricing' || hash === '#contact') {
+          const id = hash.substring(1);
+          setTimeout(() => {
+            const element = document.getElementById(id);
+            if (element) {
+              element.scrollIntoView({ behavior: 'smooth' });
+            }
+          }, 100);
+        }
       }
     };
 
@@ -127,33 +136,23 @@ export default function App() {
   }, []);
 
   const navigateToHomeAndScroll = (scrollToId?: string) => {
-    if (currentView !== 'home') {
-      window.location.hash = '';
-      setTimeout(() => {
-        if (scrollToId === 'services') {
-          document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' });
-        } else if (scrollToId === 'work') {
-          document.getElementById('work')?.scrollIntoView({ behavior: 'smooth' });
-        } else if (scrollToId === 'about') {
-          document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
-        } else if (scrollToId === 'pricing') {
-          pricingRef.current?.scrollIntoView({ behavior: 'smooth' });
-        } else if (scrollToId === 'contact') {
-          contactRef.current?.scrollIntoView({ behavior: 'smooth' });
-        }
-      }, 100);
-    } else {
-      if (scrollToId === 'services') {
-        document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' });
-      } else if (scrollToId === 'work') {
-        document.getElementById('work')?.scrollIntoView({ behavior: 'smooth' });
-      } else if (scrollToId === 'about') {
-        document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
-      } else if (scrollToId === 'pricing') {
-        scrollToPricing();
-      } else if (scrollToId === 'contact') {
-        scrollToContact();
+    if (!scrollToId) {
+      if (window.location.hash !== '') {
+        window.location.hash = '';
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       }
+      return;
+    }
+
+    if (window.location.hash === '#' + scrollToId) {
+      // If already on the hash, scroll to it manually
+      const element = document.getElementById(scrollToId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    } else {
+      window.location.hash = '#' + scrollToId;
     }
   };
 
